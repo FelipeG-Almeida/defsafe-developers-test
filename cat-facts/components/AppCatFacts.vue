@@ -7,8 +7,8 @@
 			fact, they should click the blue button. This retrieves a new cat
 			fact from a public API and refreshes the fact.
 		</p>
-		<button>
-			<img src="/refresh.svg" alt="" />
+		<button class="flex items-center gap-x-2.5 p-3 w-fit font-medium text-white rounded-lg">
+			<img src="/refresh.svg" class="w-8" alt="" />
 			GET A RANDOM CAT FACT
 		</button>
 	</div>
@@ -21,5 +21,6 @@ h4 {
 
 button {
 	background-color: #4a4e69;
+	box-shadow: 7px 7px 10px 0px rgba(0,0,0,0.5);
 }
 </style>
