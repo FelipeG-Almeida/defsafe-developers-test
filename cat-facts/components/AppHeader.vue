@@ -1,5 +1,5 @@
 <template>
-	<header class="flex flex-col items-center text-white p-8">
+	<header class="flex flex-col items-center justify-center text-white h-1/4">
 		<div>
 			<h1 class="text-6xl font-semibold">
 				THE DEFSAVE CAT FACTS PAGE
