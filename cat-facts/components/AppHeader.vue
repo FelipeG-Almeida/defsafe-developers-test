@@ -1,0 +1,18 @@
+<template>
+	<header class="flex flex-col items-center text-white p-8">
+		<div>
+			<h1 class="text-6xl font-semibold">
+				THE DEFSAVE CAT FACTS PAGE
+			</h1>
+			<small class="text-base font-light mt-2 inline-block">Your daily cats fact 🐱</small>
+		</div>
+	</header>
+</template>
+
+<script setup lang="ts"></script>
+
+<style scoped>
+header {
+	background-color: #22223b;
+}
+</style>
