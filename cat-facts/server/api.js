@@ -1,9 +1,11 @@
+import { useStorage } from '@vueuse/core';
+
 const url = 'https://meowfacts.herokuapp.com/';
 
 export default async function fetchFacts() {
-	const localData = localStorage.getItem('catFacts');
+	const catFactsStorage = useStorage('catFacts', { data: [] });
 
-	if (localData) {
+	if (catFactsStorage.value.data.length > 0) {
 		return;
 	}
 
@@ -13,7 +15,7 @@ export default async function fetchFacts() {
 			throw new Error('Error fetching API');
 		}
 		const data = await response.json();
-		localStorage.setItem('catFacts', JSON.stringify(data));
+		catFactsStorage.value.data = data;
 	} catch (error) {
 		console.error(error);
 	}
