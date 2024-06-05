@@ -3,7 +3,7 @@
 		class="flex flex-col gap-y-5 md:gap-y-0 items-center md:items-start h-full justify-between py-9 w-full md:w-2/6">
 		<h4 class="text-white text-3xl font-semibold">CAT FACT:</h4>
 		<Transition>
-			<p v-if="this.fadeInOut" :style="{ fontSize: fontSize }" class="font-medium">
+			<p v-if="fadeInOut" :style="{ fontSize: fontSize }" class="font-medium">
 				{{ randomFact }}
 			</p>
 		</Transition>
@@ -16,46 +16,50 @@
 </template>
 
 <script>
+import { ref, onMounted, computed } from 'vue';
 import fetchFacts from '../server/api';
+import { useStorage } from '@vueuse/core';
 
 export default {
-	data() {
-		return { randomFact: '', localData: [], fadeInOut: false };
-	},
+	setup() {
+		const randomFact = ref('');
+		const fadeInOut = ref(false);
+		const catFactsStorage = useStorage('catFacts', { data: [] });
+		const localData = ref(catFactsStorage.value.data);
 
-	async mounted() {
-		this.localData = JSON.parse(localStorage.getItem('catFacts'))?.data;
-		if (!this.localData) {
-			try {
-				await fetchFacts();
-				this.localData = JSON.parse(
-					localStorage.getItem('catFacts')
-				)?.data;
-			} catch (error) {
-				console.error('Error fetching facts:', error);
-				return;
-			}
-		}
-		this.getRandomFact();
-	},
+		const fontSize = computed(() => {
+			return randomFact.value.length > 200 ? '0.9rem' : '1.5rem';
+		});
 
-	computed: {
-		fontSize() {
-			return this.randomFact.length > 200 ? '0.9rem' : '1.5rem';
-		}
-	},
-
-	methods: {
-		getRandomFact() {
-			this.fadeInOut = false;
-			const randomIndex = Math.floor(
-				Math.random() * this.localData.length
-			);
+		const getRandomFact = () => {
+			fadeInOut.value = false;
+			const randomIndex = Math.floor(Math.random() * localData.value.length);
 			setTimeout(() => {
-				this.randomFact = this.localData[randomIndex];
-				this.fadeInOut = true;
-			}, 500)
-		},
+				randomFact.value = localData.value[randomIndex];
+				fadeInOut.value = true;
+			}, 500);
+		};
+
+		onMounted(async () => {
+			if (!localData.value.length) {
+				try {
+					await fetchFacts();
+					localData.value = JSON.parse(localStorage.getItem('catFacts'))?.data || [];
+					catFactsStorage.value.data = localData.value;
+				} catch (error) {
+					console.error('Error fetching facts:', error);
+					return;
+				}
+			}
+			getRandomFact();
+		});
+
+		return {
+			randomFact,
+			fadeInOut,
+			getRandomFact,
+			fontSize,
+		};
 	},
 };
 </script>
