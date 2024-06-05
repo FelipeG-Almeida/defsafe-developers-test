@@ -28,7 +28,7 @@ export default {
 		const localData = ref(catFactsStorage.value.data);
 
 		const fontSize = computed(() => {
-			return randomFact.value.length > 200 ? '0.9rem' : '1.5rem';
+			return randomFact.value && randomFact.value.length > 200 ? '0.9rem' : '1.5rem';
 		});
 
 		const getRandomFact = () => {
